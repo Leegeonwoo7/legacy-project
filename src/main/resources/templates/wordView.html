@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word View</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.277.0/lucide.min.css" />
+</head>
+<body>
+<div class="w-full max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="bg-white rounded-lg shadow-md p-6 space-y-6">
+        <header class="border-b pb-4">
+            <h1 class="text-3xl font-bold text-gray-900" th:text="${word.name}">TITLE</h1>
+
+            <div class="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-600">
+                <div class="flex items-center gap-2">
+                    <span th:text="'작성자: ' + ${word.writer}"></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span th:text="'작성일: ' + ${word.createAt}"></span>
+                </div>
+            </div>
+        </header>
+
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-gray-800">설명</h2>
+            <div class="prose max-w-none">
+                <p class="text-gray-700 leading-relaxed" th:text="${word.description}">
+                    CONTENT
+                </p>
+            </div>
+        </section>
+
+        <footer class="border-t pt-4">
+            <div class="flex justify-between items-center text-sm text-gray-500">
+                <span th:text="'조회수: ' + ${word.viewCount}"></span>
+            </div>
+        </footer>
+    </div>
+</div>
+
+</body>
+</html>

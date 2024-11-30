@@ -142,7 +142,9 @@
             <!-- 예제 데이터 -->
             <tr th:each="word: ${words}">
                 <td th:text="${word.id}"></td>
-                <td th:text="${word.name}"></td>
+                <td>
+                    <a th:href="@{'/word/' + ${word.id}}" th:text="${word.name}"></a>
+                </td>
                 <td th:text="${word.writer}"></td>
                 <td th:text="${word.dDay}"></td>
                 <td th:text="${word.viewCount}"></td>

@@ -1,19 +1,21 @@
 package org.example.board.word;
 
+import lombok.extern.slf4j.Slf4j;
+import org.example.board.user.UserRepository;
+import org.example.board.word.dto.response.FindWordResponse;
 import org.example.board.word.dto.response.FindWordsResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/word")
 public class WordController {
-    private final WordService wordService = new WordService(new WordRepository());
+    private final WordService wordService = new WordService(new WordRepository(), new UserRepository());
 
     @GetMapping("/new")
     public String wordForm() {
@@ -29,8 +31,17 @@ public class WordController {
 
     @PostMapping("/new")
     public String newWord(@RequestParam String name, @RequestParam String description) {
-        Word word = new Word(null, name, description, null, null, null);
+        Word word = new Word(null, name, description, LocalDate.now(), null, null);
         wordService.save(word);
         return "redirect:/word";
+    }
+
+    @GetMapping("/{id}")
+    public String wordView(@PathVariable Long id, Model model) {
+        log.debug("[컨트롤러] INPUT ID = {}", id);
+        FindWordResponse response = wordService.findWord(id);
+        log.debug("[컨트롤러] OUTPUT RESPONSE = {}", response);
+        model.addAttribute("word", response);
+        return "/wordView";
     }
 }

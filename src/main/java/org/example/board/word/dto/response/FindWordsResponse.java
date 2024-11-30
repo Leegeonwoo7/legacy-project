@@ -19,12 +19,12 @@ public class FindWordsResponse {
         this.viewCount = viewCount;
     }
 
-    public static FindWordsResponse from(Word word) {
+    public static FindWordsResponse of(Word word, String username) {
         return new FindWordsResponse(
                 word.getId(),
                 word.getName(),
                 word.changeToDday(),
-                null,
+                username,
                 word.getViewCount()
         );
     }

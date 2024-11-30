@@ -1,19 +1,23 @@
 package org.example.word;
 
-import org.example.board.exception.NotFoundException;
 import org.example.board.word.Word;
 import org.example.board.word.WordRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
 class WordRepositoryTest {
 
     WordRepository wordRepository = new WordRepository();
+
+    @BeforeEach
+    void clear() {
+        wordRepository.deleteAll();
+    }
 
     @Test
     void 하나의_단어를_저장한다() {
@@ -22,7 +26,7 @@ class WordRepositoryTest {
         wordRepository.save(word);
 
         //when
-        Word findWord = wordRepository.find("JPA");
+        Word findWord = wordRepository.findByName("JPA");
 
         //then
         assertThat(findWord).isNotNull();
@@ -30,54 +34,35 @@ class WordRepositoryTest {
     }
 
     @Test
-    void 단어_등록일자_년_단위_테스트() {
-        LocalDate beforeOneYear = LocalDate.of(2023, 11, 22);
-        LocalDate today = LocalDate.now();
+    void 모든_단어목록을_조회한다() {
+        //given
+        Word JPA = new Word(null, "JPA", "객체와 DB사이의 패러다임 불일치 해결", LocalDate.now(), null, null);
+        Word SPRING = new Word(null, "SPRING", "객체지향적인 코드작성을 서포트해줌", LocalDate.now(), null, null);
+        Word LOMBOK = new Word(null, "LOMBOK", "Getter,Setter와 같은 반복되는 코드를 어노테이션으로 해결", LocalDate.now(), null, null);
 
-        long between = ChronoUnit.DAYS.between(beforeOneYear, today);
-        System.out.println(dateFormat(between));
+        wordRepository.save(JPA);
+        wordRepository.save(SPRING);
+        wordRepository.save(LOMBOK);
 
-        LocalDate beforeTwoYear = LocalDate.of(2022, 11, 22);
-        long twoYear = ChronoUnit.DAYS.between(beforeTwoYear, today);
-        System.out.println(dateFormat(twoYear));
+        //when
+        List<Word> words = wordRepository.findAll();
+
+        //then
+        assertThat(words).hasSize(3);
     }
 
     @Test
-    void 단어_등록일자_개월_단위_테스트() {
-        LocalDate beforeTwoMonth = LocalDate.of(2024, 9, 22);
-        LocalDate today = LocalDate.now();
+    void view_count_를_1씩_증가시킨다() {
+        //given
+        Word JPA = new Word(null, "JPA", "객체와 DB사이의 패러다임 불일치 해결", LocalDate.now(), null, null);
+        wordRepository.save(JPA);
 
-        long between = ChronoUnit.DAYS.between(beforeTwoMonth, today);
-        System.out.println(dateFormat(between));
+        //when
+        wordRepository.updateViewCount(1L);
 
-        LocalDate beforeOneMonth = LocalDate.of(2024, 10, 22);
-        long oneMonth = ChronoUnit.DAYS.between(beforeOneMonth, today);
-        System.out.println(dateFormat(oneMonth));
-    }
-
-    @Test
-    void 단어_등록일자_주_단위_테스트() {
-        LocalDate beforeOneWeek = LocalDate.of(2024, 11, 17);
-        LocalDate today = LocalDate.now();
-
-        long between = ChronoUnit.DAYS.between(beforeOneWeek, today);
-        System.out.println(dateFormat(between));
-
-        LocalDate beforeThreeWeek = LocalDate.of(2024, 11, 16);
-        long threeWeek = ChronoUnit.DAYS.between(beforeThreeWeek, today);
-        System.out.println(dateFormat(threeWeek));
-    }
-
-    private static String dateFormat(long day) {
-        if (day >= 365) {
-            return day / 365 + "년 전";
-        }
-        if (day > 30) {
-            return day / 29 + "개월 전";
-        }
-        if (day >= 7) {
-            return day / 7 + "주 전";
-        }
-        return day + "일 전";
+        //then
+        Word word = wordRepository.findById(1L);
+        assertThat(word).extracting("id", "name", "viewCount")
+                .containsExactly(1L, "JPA", 1L);
     }
 }
