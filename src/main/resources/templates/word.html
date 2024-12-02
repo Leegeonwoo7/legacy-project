@@ -141,13 +141,15 @@
             <tbody>
             <!-- 예제 데이터 -->
             <tr th:each="word: ${words}">
-                <td th:text="${word.id}"></td>
+                <td th:text="${word.id}">식별번호</td>
                 <td>
-                    <a th:href="@{'/word/' + ${word.id}}" th:text="${word.name}"></a>
+                    <a th:href="@{'/word/' + ${word.id}}" th:text="${word.name}">단어이름</a>
                 </td>
-                <td th:text="${word.writer}"></td>
-                <td th:text="${word.dDay}"></td>
-                <td th:text="${word.viewCount}"></td>
+                <td>
+                    <a th:href="@{'/user/' + ${word.userId}}" th:text="${word.writer}">작성자</a>
+                </td>
+                <td th:text="${word.dDay}">작성일</td>
+                <td th:text="${word.viewCount}">조회수</td>
             </tr>
             </tbody>
         </table>

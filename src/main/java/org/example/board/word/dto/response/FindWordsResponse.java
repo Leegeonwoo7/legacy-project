@@ -10,13 +10,15 @@ public class FindWordsResponse {
     private String dDay;
     private String writer;
     private Long viewCount;
+    private Long userId;
 
-    public FindWordsResponse(Long id, String name, String dDay, String writer, Long viewCount) {
+    public FindWordsResponse(Long id, String name, String dDay, String writer, Long viewCount, Long userId) {
         this.id = id;
         this.name = name;
         this.dDay = dDay;
         this.writer = writer;
         this.viewCount = viewCount;
+        this.userId = userId;
     }
 
     public static FindWordsResponse of(Word word, String username) {
@@ -25,7 +27,8 @@ public class FindWordsResponse {
                 word.getName(),
                 word.changeToDday(),
                 username,
-                word.getViewCount()
+                word.getViewCount(),
+                word.getUserId()
         );
     }
 }
