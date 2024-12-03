@@ -224,6 +224,38 @@ public class WordRepository {
         }
     }
 
+    public List<Word> searchWord(String condition) {
+        String sql = "select * from word where name like ?";
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Word> list = new ArrayList<>();
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, "%" + condition + "%");
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                long wordId = rs.getLong("word_id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                LocalDate createAt = rs.getDate("create_at").toLocalDate();
+                long userId = rs.getLong("user_id");
+                long viewCount = rs.getLong("view_count");
+
+                Word word = new Word(wordId, name, description, createAt, userId, viewCount);
+                list.add(word);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(con, pstmt, rs);
+        }
+        return list;
+    }
+
     public void deleteAll() {
         String sql = "TRUNCATE TABLE word";
         Connection con = null;

@@ -25,9 +25,4 @@ public class UserController {
         model.addAttribute("response", responses);
         return "/user";
     }
-
-    @GetMapping("/test")
-    public String test() {
-        return "/test";
-    }
 }

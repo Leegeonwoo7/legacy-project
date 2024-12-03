@@ -44,4 +44,14 @@ public class WordController {
         model.addAttribute("word", response);
         return "/wordView";
     }
+
+    @GetMapping("/search")
+    public String findByCondition(@RequestParam String query, Model model) {
+        log.debug("[컨트롤러] 검색어 = {}", query);
+
+        List<FindWordsResponse> responses = wordService.findByCondition(query);
+        log.debug("[컨트롤러] 응답 객체 = {}", responses);
+        model.addAttribute("words", responses);
+        return "/word";
+    }
 }

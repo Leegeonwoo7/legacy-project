@@ -31,10 +31,12 @@ public class UserRepository {
             pstmt.setLong(1, userId);
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getString("username");
+                String username = rs.getString("username");
+                log.debug("[레포지토리] 회원이름 = {}", username);
+                return username;
             }
 
-            log.error("존재하지 않는 이름");
+            log.error("존재하지 않는 회원이름");
             return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);

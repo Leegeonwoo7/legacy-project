@@ -64,3 +64,7 @@ TRUNCATE TABLE word;
 SELECT *
 FROM word
 where word_id = 2;
+
+SELECT *
+FROM word
+WHERE name like 'J%';

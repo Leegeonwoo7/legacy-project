@@ -42,4 +42,18 @@ public class WordService {
         wordRepository.updateViewCount(wordId);
         return response;
     }
+
+    public List<FindWordsResponse> findByCondition(String condition) {
+        List<Word> words = wordRepository.searchWord(condition);
+        log.debug("[서비스] 검색어에 대한 단어목록 = {}", words);
+        List<FindWordsResponse> responses = new ArrayList<>();
+
+        for (Word word : words) {
+            String username = userRepository.findUsernameById(word.getUserId());
+            FindWordsResponse response = FindWordsResponse.of(word, username);
+            responses.add(response);
+        }
+
+        return responses;
+    }
 }
