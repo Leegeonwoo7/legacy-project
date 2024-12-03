@@ -1,8 +1,8 @@
-package org.example.board.user;
+package org.example.board.repository;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.board.user.dto.response.UserWordResponse;
+import org.example.board.dto.user.dto.response.UserWordResponse;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;

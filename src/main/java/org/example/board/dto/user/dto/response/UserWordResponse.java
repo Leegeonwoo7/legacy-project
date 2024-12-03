@@ -1,4 +1,4 @@
-package org.example.board.user.dto.response;
+package org.example.board.dto.user.dto.response;
 
 import lombok.Getter;
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<div class="container mx-auto p-8">
+    <!-- Header -->
+    <header class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Hello Word!</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex gap-8">
+        <!-- Most Viewed Words Section -->
+        <section class="w-1/2 bg-white shadow-md rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">가장 많이 조회된 단어</h2>
+                <!-- More Link -->
+                <a href="/word?page=1" class="text-blue-500 text-sm hover:underline">더보기</a>
+            </div>
+            <ul>
+                <li th:each="word : ${topWords}" class="flex justify-between py-2 border-b">
+                    <a th:href="'/word/' + ${word.wordId}">
+                        <span th:text="${word.wordName}" class="text-gray-700 font-medium">단어</span>
+                    </a>
+                    <span th:text="${word.viewCount} + ' 조회'" class="text-gray-500 text-sm">100 조회</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Additional Section -->
+        <section class="w-1/2 bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">새로운 기능</h2>
+            <p class="text-gray-600">이 공간은 새로운 알림이나 공지사항을 표시하는 용도로 사용됩니다.</p>
+        </section>
+    </div>
+</div>
+</body>
+</html>

@@ -1,7 +1,6 @@
-package org.example.board.word.dto.response;
+package org.example.board.dto.word.dto.response;
 
 import lombok.Getter;
-import org.example.board.word.Word;
 
 import java.time.LocalDate;
 

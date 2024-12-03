@@ -161,13 +161,9 @@
 
     <!-- Pagination -->
     <div class="pagination flex gap-2 justify-center mt-6">
-        <button>이전</button>
-        <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
-        <button>다음</button>
+        <button th:each="page : ${pages}">
+            <a href=""></a>
+        </button>
     </div>
 </div>
 </body>

@@ -1,6 +1,7 @@
-package org.example.board.user;
+package org.example.board.controller;
 
-import org.example.board.user.dto.response.UserWordResponse;
+import org.example.board.service.UserService;
+import org.example.board.dto.user.dto.response.UserWordResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

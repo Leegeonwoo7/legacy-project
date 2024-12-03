@@ -68,3 +68,22 @@ where word_id = 2;
 SELECT *
 FROM word
 WHERE name like 'J%';
+
+# 가장많이 조회된 단어 10개 출력
+SELECT *
+FROM word
+ORDER BY view_count DESC
+LIMIT 10;
+
+# 페이징 처리
+
+SELECT *
+FROM word
+LIMIT 10 OFFSET 10;
+
+SELECT *
+FROM word
+LIMIT 10;
+
+SELECT COUNT(*) AS total_count
+FROM word

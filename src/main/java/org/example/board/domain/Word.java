@@ -1,4 +1,4 @@
-package org.example.board.word;
+package org.example.board.domain;
 
 import lombok.Getter;
 import lombok.Setter;

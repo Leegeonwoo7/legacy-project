@@ -1,9 +1,12 @@
-package org.example.board.word;
+package org.example.board.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.board.user.UserRepository;
-import org.example.board.word.dto.response.FindWordResponse;
-import org.example.board.word.dto.response.FindWordsResponse;
+import org.example.board.repository.UserRepository;
+import org.example.board.domain.Word;
+import org.example.board.repository.WordRepository;
+import org.example.board.service.WordService;
+import org.example.board.dto.word.dto.response.FindWordResponse;
+import org.example.board.dto.word.dto.response.FindWordsResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +26,7 @@ public class WordController {
     }
 
     @GetMapping
-    public String words(Model model) {
+    public String words(Model model, @RequestParam Integer page) {
         List<FindWordsResponse> words = wordService.findAll();
         model.addAttribute("words", words);
         return "/word";

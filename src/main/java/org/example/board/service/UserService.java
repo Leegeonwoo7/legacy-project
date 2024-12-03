@@ -1,6 +1,7 @@
-package org.example.board.user;
+package org.example.board.service;
 
-import org.example.board.user.dto.response.UserWordResponse;
+import org.example.board.repository.UserRepository;
+import org.example.board.dto.user.dto.response.UserWordResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

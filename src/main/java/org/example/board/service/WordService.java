@@ -1,14 +1,19 @@
-package org.example.board.word;
+package org.example.board.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.board.user.UserRepository;
-import org.example.board.word.dto.response.FindWordResponse;
-import org.example.board.word.dto.response.FindWordsResponse;
+import org.example.board.dto.word.dto.response.TopWordsResponse;
+import org.example.board.repository.WordRepository;
+import org.example.board.repository.UserRepository;
+import org.example.board.domain.Word;
+import org.example.board.dto.word.dto.response.FindWordResponse;
+import org.example.board.dto.word.dto.response.FindWordsResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Service
 public class WordService {
     private final WordRepository wordRepository;
     private final UserRepository userRepository;
@@ -55,5 +60,9 @@ public class WordService {
         }
 
         return responses;
+    }
+
+    public List<TopWordsResponse> findTopWords() {
+        return wordRepository.findTopWords();
     }
 }

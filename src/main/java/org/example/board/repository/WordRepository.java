@@ -1,8 +1,12 @@
-package org.example.board.word;
+package org.example.board.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.board.dto.word.dto.response.FindWordsResponse;
+import org.example.board.dto.word.dto.response.TopWordsResponse;
 import org.example.board.exception.NotFoundException;
-import org.example.board.word.dto.response.FindWordResponse;
+import org.example.board.domain.Word;
+import org.example.board.dto.word.dto.response.FindWordResponse;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -12,6 +16,7 @@ import java.util.List;
 import static org.example.board.utils.ConnectionUtil.*;
 
 @Slf4j
+@Repository
 public class WordRepository {
 
     public void save(Word word) {
@@ -138,6 +143,29 @@ public class WordRepository {
         return null;
     }
 
+    public int findTotalWord() {
+        String sql = "SELECT COUNT(*) AS total_count FROM word";
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        int totalWord = 0;
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                totalWord = rs.getInt("total_count");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(con, pstmt, rs);
+        }
+        return totalWord;
+    }
+
     public void updateByName(String oldName, Word newWord) {
         String sql = "update word set name = ? ,description = ? where name = ?";
         Connection con = null;
@@ -256,8 +284,35 @@ public class WordRepository {
         return list;
     }
 
+    public List<TopWordsResponse> findTopWords() {
+        String sql = "SELECT * FROM word ORDER BY view_count DESC LIMIT 10";
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        List<TopWordsResponse> responses = new ArrayList<>();
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                long wordId = rs.getLong("word_id");
+                String name = rs.getString("name");
+                long viewCount = rs.getLong("view_count");
+
+                TopWordsResponse response = TopWordsResponse.of(wordId, name, viewCount);
+                responses.add(response);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return responses;
+    }
+
     public void deleteAll() {
-        String sql = "TRUNCATE TABLE word";
+        String sql = "TRUNCATE TABLE word12";
         Connection con = null;
         PreparedStatement pstmt = null;
 

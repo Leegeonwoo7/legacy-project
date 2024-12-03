@@ -1,7 +1,7 @@
 package org.example.word;
 
-import org.example.board.word.Word;
-import org.example.board.word.WordRepository;
+import org.example.board.domain.Word;
+import org.example.board.repository.WordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
