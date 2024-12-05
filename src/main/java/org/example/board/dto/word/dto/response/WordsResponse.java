@@ -3,8 +3,13 @@ package org.example.board.dto.word.dto.response;
 import lombok.Getter;
 import org.example.board.domain.Word;
 
+/**
+ * 단어 목록조회
+ * /word
+ * /word/search
+ */
 @Getter
-public class FindWordsResponse {
+public class WordsResponse {
     private Long id;
     private String name;
     private String dDay;
@@ -12,7 +17,7 @@ public class FindWordsResponse {
     private Long viewCount;
     private Long userId;
 
-    public FindWordsResponse(Long id, String name, String dDay, String writer, Long viewCount, Long userId) {
+    public WordsResponse(Long id, String name, String dDay, String writer, Long viewCount, Long userId) {
         this.id = id;
         this.name = name;
         this.dDay = dDay;
@@ -21,8 +26,8 @@ public class FindWordsResponse {
         this.userId = userId;
     }
 
-    public static FindWordsResponse of(Word word, String username) {
-        return new FindWordsResponse(
+    public static WordsResponse of(Word word, String username) {
+        return new WordsResponse(
                 word.getId(),
                 word.getName(),
                 word.changeToDday(),

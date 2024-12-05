@@ -1,11 +1,10 @@
 package org.example.board.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.board.dto.word.dto.response.FindWordsResponse;
-import org.example.board.dto.word.dto.response.TopWordsResponse;
+import org.example.board.dto.word.dto.response.TopWordResponse;
 import org.example.board.exception.NotFoundException;
 import org.example.board.domain.Word;
-import org.example.board.dto.word.dto.response.FindWordResponse;
+import org.example.board.dto.word.dto.response.WordResponse;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -105,7 +104,7 @@ public class WordRepository {
         return null;
     }
 
-    public FindWordResponse findWordWithWriterById(Long wordId) {
+    public WordResponse findWordWithWriterById(Long wordId) {
         log.debug("[레포지토리] wordId = {}", wordId);
         String sql = """
                 SELECT
@@ -132,7 +131,7 @@ public class WordRepository {
                 LocalDate createAt = rs.getDate("create_at").toLocalDate();
                 long viewCount = rs.getLong("view_count");
                 log.debug("[레포지토리] name = {}", name);
-                return FindWordResponse.of(name, description, writer, createAt, viewCount);
+                return WordResponse.of(name, description, writer, createAt, viewCount);
             }
 
         } catch (SQLException e) {
@@ -284,13 +283,13 @@ public class WordRepository {
         return list;
     }
 
-    public List<TopWordsResponse> findTopWords() {
+    public List<TopWordResponse> findTopWords() {
         String sql = "SELECT * FROM word ORDER BY view_count DESC LIMIT 10";
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        List<TopWordsResponse> responses = new ArrayList<>();
+        List<TopWordResponse> responses = new ArrayList<>();
         try {
             con = getConnection();
             pstmt = con.prepareStatement(sql);
@@ -301,7 +300,7 @@ public class WordRepository {
                 String name = rs.getString("name");
                 long viewCount = rs.getLong("view_count");
 
-                TopWordsResponse response = TopWordsResponse.of(wordId, name, viewCount);
+                TopWordResponse response = TopWordResponse.of(wordId, name, viewCount);
                 responses.add(response);
             }
         } catch (SQLException e) {
@@ -309,6 +308,38 @@ public class WordRepository {
         }
 
         return responses;
+    }
+
+    public List<Word> test(int limit, int offset) {
+        String sql = "SELECT * FROM word LIMIT ? OFFSET ?";
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Word> list = new ArrayList<>();
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, offset);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                long wordId = rs.getLong("word_id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                LocalDate createAt = rs.getDate("create_at").toLocalDate();
+                long userId = rs.getLong("user_id");
+                long viewCount = rs.getLong("view_count");
+
+                Word word = new Word(wordId, name, description, createAt, userId, viewCount);
+                list.add(word);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(con, pstmt, rs);
+        }
+        return list;
     }
 
     public void deleteAll() {

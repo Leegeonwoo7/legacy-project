@@ -1,12 +1,13 @@
 package org.example.board.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.board.dto.Response;
 import org.example.board.repository.UserRepository;
 import org.example.board.domain.Word;
 import org.example.board.repository.WordRepository;
 import org.example.board.service.WordService;
-import org.example.board.dto.word.dto.response.FindWordResponse;
-import org.example.board.dto.word.dto.response.FindWordsResponse;
+import org.example.board.dto.word.dto.response.WordResponse;
+import org.example.board.dto.word.dto.response.WordsResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,11 @@ public class WordController {
     }
 
     @GetMapping
-    public String words(Model model, @RequestParam Integer page) {
-        List<FindWordsResponse> words = wordService.findAll();
-        model.addAttribute("words", words);
+    public String words(Model model, @RequestParam(defaultValue = "1") Integer page) {
+        Response<?> response = wordService.findAll(page);
+        model.addAttribute("words", response);
+
+        model.asMap().forEach((key, value) -> log.debug("key = {}, value = {} + \n", key, value));
         return "/word";
     }
 
@@ -41,19 +44,14 @@ public class WordController {
 
     @GetMapping("/{id}")
     public String wordView(@PathVariable Long id, Model model) {
-        log.debug("[컨트롤러] INPUT ID = {}", id);
-        FindWordResponse response = wordService.findWord(id);
-        log.debug("[컨트롤러] OUTPUT RESPONSE = {}", response);
+        WordResponse response = wordService.findWord(id);
         model.addAttribute("word", response);
         return "/wordView";
     }
 
     @GetMapping("/search")
     public String findByCondition(@RequestParam String query, Model model) {
-        log.debug("[컨트롤러] 검색어 = {}", query);
-
-        List<FindWordsResponse> responses = wordService.findByCondition(query);
-        log.debug("[컨트롤러] 응답 객체 = {}", responses);
+        List<WordsResponse> responses = wordService.findByCondition(query);
         model.addAttribute("words", responses);
         return "/word";
     }

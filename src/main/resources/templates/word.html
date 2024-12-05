@@ -144,7 +144,7 @@
             </thead>
             <tbody>
             <!-- 예제 데이터 -->
-            <tr th:each="word: ${words}">
+            <tr th:each="word: ${words.data.item}">
                 <td th:text="${word.id}">식별번호</td>
                 <td>
                     <a th:href="@{'/word/' + ${word.id}}" th:text="${word.name}">단어이름</a>
@@ -161,8 +161,10 @@
 
     <!-- Pagination -->
     <div class="pagination flex gap-2 justify-center mt-6">
-        <button th:each="page : ${pages}">
-            <a href=""></a>
+        <button th:each="page : ${#numbers.sequence(1, words.data.pagination.totalPage)}">
+            <a th:href="@{/word(page=${page})}">
+                <span th:text="${page}"></span>
+            </a>
         </button>
     </div>
 </div>
