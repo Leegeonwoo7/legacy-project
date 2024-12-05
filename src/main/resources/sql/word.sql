@@ -76,8 +76,7 @@ ORDER BY view_count DESC
 LIMIT 10;
 
 # 페이징 처리
-
-SELECT *
+SELECT count(*)
 FROM word
 LIMIT 10 OFFSET 0;
 
@@ -86,4 +85,6 @@ FROM word
 LIMIT 10;
 
 SELECT COUNT(*) AS total_count
-FROM word
+FROM word;
+
+SELECT

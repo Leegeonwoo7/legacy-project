@@ -2,9 +2,7 @@ package org.example.board.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.board.dto.Response;
-import org.example.board.repository.UserRepository;
 import org.example.board.domain.Word;
-import org.example.board.repository.WordRepository;
 import org.example.board.service.WordService;
 import org.example.board.dto.word.dto.response.WordResponse;
 import org.example.board.dto.word.dto.response.WordsResponse;
@@ -19,7 +17,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/word")
 public class WordController {
-    private final WordService wordService = new WordService(new WordRepository(), new UserRepository());
+    private final WordService wordService;
+
+    public WordController(WordService wordService) {
+        this.wordService = wordService;
+    }
 
     @GetMapping("/new")
     public String wordForm() {
@@ -31,7 +33,6 @@ public class WordController {
         Response<?> response = wordService.findAll(page);
         model.addAttribute("words", response);
 
-        model.asMap().forEach((key, value) -> log.debug("key = {}, value = {} + \n", key, value));
         return "/word";
     }
 

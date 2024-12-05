@@ -104,7 +104,7 @@ public class WordRepository {
         return null;
     }
 
-    public WordResponse findWordWithWriterById(Long wordId) {
+    public WordResponse findWordWithWriter(Long wordId) {
         log.debug("[레포지토리] wordId = {}", wordId);
         String sql = """
                 SELECT
@@ -251,7 +251,7 @@ public class WordRepository {
         }
     }
 
-    public List<Word> searchWord(String condition) {
+    public List<Word> findBy(String condition) {
         String sql = "select * from word where name like ?";
         Connection con = null;
         PreparedStatement pstmt = null;

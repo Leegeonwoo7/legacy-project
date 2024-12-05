@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.board.constants.PageInfo.*;
+
 @Slf4j
 @Service
 public class WordService {
@@ -32,9 +34,9 @@ public class WordService {
 
     public Response<?> findAll(int currentPage) {
         int totalCount = wordRepository.findTotalWord();
-        int totalPage = (int) Math.ceil((double) totalCount / 10);
-        int offset = (currentPage - 1) * 10;
-        List<Word> words = wordRepository.test(10, offset);
+        int totalPage = (int) Math.ceil((double) totalCount / TOTAL_PAGE);
+        int offset = (currentPage - 1) * TOTAL_PAGE;
+        List<Word> words = wordRepository.test(TOTAL_PAGE, offset);
 
 
         List<WordsResponse> list = new ArrayList<>();
@@ -50,16 +52,15 @@ public class WordService {
 
     //트랜잭션 적용필요, 예외 발생시 viewCount가 증가되서는 안됨
     public WordResponse findWord(final Long wordId) {
-        WordResponse response = wordRepository.findWordWithWriterById(wordId);
-        log.debug("[서비스] RESPONSE = {}", response);
+        WordResponse response = wordRepository.findWordWithWriter(wordId);
         wordRepository.updateViewCount(wordId);
         return response;
     }
 
-    public List<WordsResponse> findByCondition(String condition) {
-        List<Word> words = wordRepository.searchWord(condition);
-        log.debug("[서비스] 검색어에 대한 단어목록 = {}", words);
+    public List<WordsResponse> findByCondition(int currentPage, String condition) {
+        List<Word> words = wordRepository.findBy(condition);
         List<WordsResponse> responses = new ArrayList<>();
+
 
         for (Word word : words) {
             String username = userRepository.findUsernameById(word.getUserId());
@@ -67,6 +68,9 @@ public class WordService {
             responses.add(response);
         }
 
+        int totalCount = wordRepository.findTotalWord();
+        int totalPage = (int) Math.ceil((double) totalCount / TOTAL_PAGE);
+        new Pagination(totalPage, currentPage);
         return responses;
     }
 
